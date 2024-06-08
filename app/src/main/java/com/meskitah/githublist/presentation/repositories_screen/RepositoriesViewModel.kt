@@ -36,8 +36,6 @@ class RepositoriesViewModel @Inject constructor(
         when (event) {
             is RepositoriesEvent.OnLoadRepositories -> loadSports()
 
-            is RepositoriesEvent.OnReloadRepositories -> reloadSports()
-
             is RepositoriesEvent.OnRepositoryClick -> {
 //                state = state.copy(
 //                    repositories = state.repositories.toMutableList()
@@ -55,22 +53,5 @@ class RepositoriesViewModel @Inject constructor(
                 .cachedIn(viewModelScope)
                 .collect { _state.value = it }
         }
-    }
-
-    private fun reloadSports() {
-//        viewModelScope.launch {
-//            useCases
-//                .getRepositories(state.repositories)
-//                .onSuccess { sports ->
-//                    state = state.copy(repositories = sports.toMutableList())
-//                    _uiEvent.send(UiEvent.Success)
-//                }
-//                .onFailure {
-//                    state = state.copy(isError = true)
-//                    _uiEvent.send(
-//                        UiEvent.ShowSnackbar(UiText.DynamicString(it.localizedMessage ?: ""))
-//                    )
-//                }
-//        }
     }
 }
