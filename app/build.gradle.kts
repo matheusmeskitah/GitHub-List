@@ -71,6 +71,9 @@ dependencies {
     implementation(libs.moshi.kotlin)
     implementation(libs.moshi.converter)
 
+    implementation(libs.paging3)
+    implementation(libs.paging3.compose)
+
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation)

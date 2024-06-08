@@ -17,6 +17,8 @@ hiltNavigation = "1.2.0"
 retrofit = "2.11.0"
 okHttp = "4.12.0"
 moshi = "1.15.1"
+paging3 = "3.1.1"
+paging3-compose = "1.0.0-alpha20"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -46,6 +48,9 @@ okhttp-interceptor = { group = "com.squareup.okhttp3", name = "logging-intercept
 moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "moshi" }
 moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
 moshi-converter = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
+
+paging3 = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "paging3" }
+paging3-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging3-compose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
