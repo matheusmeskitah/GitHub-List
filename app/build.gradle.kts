@@ -61,6 +61,9 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.fonts)
+    implementation(libs.icons.core)
+    implementation(libs.icons.extended)
 
     implementation(libs.androidx.navigation)
 
@@ -77,6 +80,8 @@ dependencies {
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation)
+
+    implementation(libs.coil)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

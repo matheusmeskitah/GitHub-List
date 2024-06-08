@@ -12,6 +12,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -28,16 +29,16 @@ class RepositoriesViewModel @Inject constructor(
     val uiEvent = _uiEvent.receiveAsFlow()
 
     init {
-        onEvent(RepositoriesEvent.OnLoadSports)
+        onEvent(RepositoriesEvent.OnLoadRepositories)
     }
 
     fun onEvent(event: RepositoriesEvent) {
         when (event) {
-            is RepositoriesEvent.OnLoadSports -> loadSports()
+            is RepositoriesEvent.OnLoadRepositories -> loadSports()
 
-            is RepositoriesEvent.OnReloadSports -> reloadSports()
+            is RepositoriesEvent.OnReloadRepositories -> reloadSports()
 
-            is RepositoriesEvent.OnSportsClick -> {
+            is RepositoriesEvent.OnRepositoryClick -> {
 //                state = state.copy(
 //                    repositories = state.repositories.toMutableList()
 //                )
@@ -50,6 +51,7 @@ class RepositoriesViewModel @Inject constructor(
             useCases
                 .getRepositories()
                 .distinctUntilChanged()
+                .filterNotNull()
                 .cachedIn(viewModelScope)
                 .collect { _state.value = it }
         }

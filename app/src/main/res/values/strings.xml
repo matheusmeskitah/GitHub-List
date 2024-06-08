@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">GitHub List</string>
+
+    <!-- Repository List -->
+    <string name="repo_owner_cd">Repository owner image</string>
+    <string name="retry">Retry</string>
+
+    <!--  Errors  -->
+    <string name="error_image">Error image</string>
+    <string name="error_oops_something_went_wrong">Oops, something went wrong!</string>
+    <string name="oops">Oops!</string>
+    <string name="error_something_went_wrong">Something went wrong, please try again</string>
 </resources>
