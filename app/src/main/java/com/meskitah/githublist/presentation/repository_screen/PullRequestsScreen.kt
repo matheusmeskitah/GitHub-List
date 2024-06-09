@@ -28,6 +28,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +46,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
 import com.meskitah.githublist.R
+import com.meskitah.githublist.core.util.UiEvent
 import com.meskitah.githublist.presentation.components.PullRequestItem
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,6 +79,16 @@ fun PullRequestsScreen(
 
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
+    LaunchedEffect(true) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                is UiEvent.Success -> {
+                    isRefreshing = false
+                }
+            }
         }
     }
 
@@ -116,7 +128,13 @@ fun PullRequestsScreen(
             isRefreshing = isRefreshing,
             onRefresh = {
                 isRefreshing = true
-                viewModel.onEvent(PullRequestEvent.OnReloadPullRequest(userName, repositoryName))
+                viewModel.onEvent(
+                    PullRequestEvent.OnReloadPullRequest(
+                        userName,
+                        repositoryName,
+                        context
+                    )
+                )
             },
             modifier = Modifier
                 .fillMaxSize()
