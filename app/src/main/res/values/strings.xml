@@ -4,6 +4,8 @@
     <!--  Repository List  -->
     <string name="repo_owner_cd">Repository owner image</string>
     <string name="retry">Retry</string>
+    <string name="forks_cd">Number of forks</string>
+    <string name="stars_cd">Number of stars</string>
 
     <!--  Errors  -->
     <string name="error_image">Error image</string>

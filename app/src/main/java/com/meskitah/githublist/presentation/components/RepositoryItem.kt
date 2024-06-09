@@ -25,9 +25,6 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.CustomAccessibilityAction
-import androidx.compose.ui.semantics.customActions
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -84,7 +81,7 @@ fun RepositoryItem(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = Icons.Outlined.ForkRight,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.forks_cd),
                         modifier = Modifier.size(16.dp),
                         tint = if (isSystemInDarkTheme()) DarkerYellow else Yellow
                     )
@@ -98,7 +95,7 @@ fun RepositoryItem(
 
                     Icon(
                         imageVector = Icons.Outlined.Star,
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.stars_cd),
                         modifier = Modifier.size(16.dp),
                         tint = if (isSystemInDarkTheme()) DarkerYellow else Yellow
                     )
