@@ -3,13 +3,13 @@ package com.meskitah.githublist.data.repository
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.meskitah.githublist.data.mapper.toRepository
-import com.meskitah.githublist.data.remote.GitHubListApi
+import com.meskitah.githublist.data.remote.GitHubApi
 import com.meskitah.githublist.domain.model.Repository
 import java.io.IOException
 import retrofit2.HttpException
 
 class RepositoriesPagingSource(
-    private val api: GitHubListApi
+    private val api: GitHubApi
 ) : PagingSource<Int, Repository>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Repository> {
         return try {

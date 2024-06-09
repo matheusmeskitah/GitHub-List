@@ -4,16 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.meskitah.githublist.core.util.UiEvent
 import com.meskitah.githublist.domain.model.Repository
 import com.meskitah.githublist.domain.use_case.RepositoriesUseCases
+import com.meskitah.githublist.presentation.navigation.ScreenRepositoryDetails
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -25,9 +23,6 @@ class RepositoriesViewModel @Inject constructor(
         MutableStateFlow(value = PagingData.empty())
     val state: MutableStateFlow<PagingData<Repository>> get() = _state
 
-    private val _uiEvent = Channel<UiEvent>()
-    val uiEvent = _uiEvent.receiveAsFlow()
-
     init {
         onEvent(RepositoriesEvent.OnLoadRepositories)
     }
@@ -37,9 +32,12 @@ class RepositoriesViewModel @Inject constructor(
             is RepositoriesEvent.OnLoadRepositories -> loadSports()
 
             is RepositoriesEvent.OnRepositoryClick -> {
-//                state = state.copy(
-//                    repositories = state.repositories.toMutableList()
-//                )
+                event.navController.navigate(
+                    ScreenRepositoryDetails(
+                        creator = event.repository.owner.login,
+                        repositoryName = event.repository.name
+                    )
+                )
             }
         }
     }

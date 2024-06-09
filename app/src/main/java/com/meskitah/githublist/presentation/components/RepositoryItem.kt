@@ -4,7 +4,6 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -27,6 +26,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.meskitah.githublist.R
@@ -34,16 +35,15 @@ import com.meskitah.githublist.core.ui.DarkerYellow
 import com.meskitah.githublist.core.ui.Yellow
 import com.meskitah.githublist.domain.model.Owner
 import com.meskitah.githublist.domain.model.Repository
+import com.meskitah.githublist.presentation.repositories_screen.RepositoriesEvent
 import com.meskitah.githublist.ui.theme.GitHubListTheme
 
 @Composable
 fun RepositoryItem(
     repository: Repository,
-    modifier: Modifier = Modifier
+    navController: NavController
 ) {
-    Card(onClick = {
-
-    }) {
+    Card(onClick = { RepositoriesEvent.OnRepositoryClick(repository, navController) }) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(16.dp)) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -115,7 +115,7 @@ fun RepositoryItemPreview() {
                 owner = Owner(id = 11, login = "my_owner", avatarUrl = ""),
                 stargazersCount = 22
             ),
-            modifier = Modifier.fillMaxWidth()
+            navController = rememberNavController()
         )
     }
 }

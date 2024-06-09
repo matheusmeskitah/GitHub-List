@@ -1,7 +1,7 @@
 package com.meskitah.githublist.data.di
 
-import com.meskitah.githublist.data.remote.GitHubListApi
-import com.meskitah.githublist.data.remote.GitHubListApi.Companion.BASE_URL
+import com.meskitah.githublist.data.remote.GitHubApi
+import com.meskitah.githublist.data.remote.GitHubApi.Companion.BASE_URL
 import com.meskitah.githublist.data.repository.GitHubListRepositoryImpl
 import com.meskitah.githublist.domain.repository.GitHubListRepository
 import com.squareup.moshi.Moshi
@@ -43,10 +43,10 @@ object GitHubListDataModule {
 
     @Provides
     @Singleton
-    fun provideOpenFoodApi(
+    fun provideGitHubListApi(
         client: OkHttpClient,
         moshi: Moshi
-    ): GitHubListApi {
+    ): GitHubApi {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
@@ -57,7 +57,7 @@ object GitHubListDataModule {
 
     @Provides
     @Singleton
-    fun provideTrackerRepository(api: GitHubListApi): GitHubListRepository {
+    fun provideGitHubListRepository(api: GitHubApi): GitHubListRepository {
         return GitHubListRepositoryImpl(api = api)
     }
 }

@@ -37,6 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -49,7 +50,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun RepositoryScreen(
     viewModel: RepositoriesViewModel = hiltViewModel(),
-    snackbarHostState: SnackbarHostState
+    snackbarHostState: SnackbarHostState,
+    navController: NavController
 ) {
     val context = LocalContext.current
     var isRefreshing by remember { mutableStateOf(false) }
@@ -141,7 +143,12 @@ fun RepositoryScreen(
                 items(
                     count = repositories.itemCount
                 ) { index ->
-                    repositories[index]?.let { RepositoryItem(repository = it) }
+                    repositories[index]?.let {
+                        RepositoryItem(
+                            repository = it,
+                            navController = navController
+                        )
+                    }
                 }
 
                 //region Pagination

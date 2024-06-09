@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.org.jetbrains.kotlin.kapt)
     alias(libs.plugins.dagger.hilt)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -66,6 +67,7 @@ dependencies {
     implementation(libs.icons.extended)
 
     implementation(libs.androidx.navigation)
+    implementation(libs.kotlinx.serialization)
 
     implementation(libs.retrofit)
     implementation(libs.okhttp)

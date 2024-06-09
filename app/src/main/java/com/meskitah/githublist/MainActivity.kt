@@ -8,7 +8,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.meskitah.githublist.presentation.navigation.GitHubListRoute
+import com.meskitah.githublist.presentation.navigation.ScreenRepositoryList
 import com.meskitah.githublist.presentation.navigation.addGitHubListGraph
 import com.meskitah.githublist.ui.theme.GitHubListTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
 
                 NavHost(
                     navController = navController,
-                    startDestination = GitHubListRoute.RepositoryListRoute.route
+                    startDestination = ScreenRepositoryList
                 ) {
                     addGitHubListGraph(navController, snackbarState)
                 }
