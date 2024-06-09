@@ -4,6 +4,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -24,10 +25,11 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.meskitah.githublist.R
@@ -35,15 +37,14 @@ import com.meskitah.githublist.core.ui.DarkerYellow
 import com.meskitah.githublist.core.ui.Yellow
 import com.meskitah.githublist.domain.model.Owner
 import com.meskitah.githublist.domain.model.Repository
-import com.meskitah.githublist.presentation.repositories_screen.RepositoriesEvent
 import com.meskitah.githublist.ui.theme.GitHubListTheme
 
 @Composable
 fun RepositoryItem(
     repository: Repository,
-    navController: NavController
+    onCardClick: () -> Unit
 ) {
-    Card(onClick = { RepositoriesEvent.OnRepositoryClick(repository, navController) }) {
+    Card(onClick = onCardClick) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(16.dp)) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -57,8 +58,12 @@ fun RepositoryItem(
                     contentDescription = stringResource(id = R.string.repo_owner_cd),
                     contentScale = ContentScale.Crop,
                     placeholder = rememberVectorPainter(Icons.Default.AccountCircle),
-                    modifier = Modifier.clip(CircleShape)
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .size(50.dp)
                 )
+
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Text(text = repository.owner.login, style = MaterialTheme.typography.labelMedium)
             }
@@ -69,7 +74,13 @@ fun RepositoryItem(
                 modifier = Modifier.weight(3f)
             ) {
                 Text(text = repository.name, style = MaterialTheme.typography.titleMedium)
+
+                Spacer(modifier = Modifier.height(4.dp))
+
                 Text(text = repository.description, style = MaterialTheme.typography.bodySmall)
+
+                Spacer(modifier = Modifier.height(16.dp))
+
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = Icons.Outlined.ForkRight,
@@ -115,7 +126,7 @@ fun RepositoryItemPreview() {
                 owner = Owner(id = 11, login = "my_owner", avatarUrl = ""),
                 stargazersCount = 22
             ),
-            navController = rememberNavController()
+            onCardClick = {}
         )
     }
 }

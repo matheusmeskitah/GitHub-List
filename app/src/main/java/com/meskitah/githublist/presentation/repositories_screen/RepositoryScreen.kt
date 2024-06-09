@@ -146,7 +146,11 @@ fun RepositoryScreen(
                     repositories[index]?.let {
                         RepositoryItem(
                             repository = it,
-                            navController = navController
+                            onCardClick = {
+                                viewModel.onEvent(
+                                    RepositoriesEvent.OnRepositoryClick(it, navController)
+                                )
+                            }
                         )
                     }
                 }

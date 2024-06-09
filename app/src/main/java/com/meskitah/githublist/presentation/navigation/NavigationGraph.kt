@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.meskitah.githublist.presentation.repositories_screen.RepositoryScreen
+import com.meskitah.githublist.presentation.repository_screen.PullRequestsScreen
 
 fun NavGraphBuilder.addGitHubListGraph(
     navController: NavController,
@@ -18,7 +19,13 @@ fun NavGraphBuilder.addGitHubListGraph(
         )
     }
 
-    composable<ScreenRepositoryDetails> {
-        val args = it.toRoute<ScreenRepositoryDetails>()
+    composable<ScreenPullRequests> {
+        val args = it.toRoute<ScreenPullRequests>()
+        PullRequestsScreen(
+            snackbarHostState = snackbarState,
+            navController = navController,
+            userName = args.creator,
+            repositoryName = args.repositoryName
+        )
     }
 }

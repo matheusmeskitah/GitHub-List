@@ -2,8 +2,8 @@ package com.meskitah.githublist.data.di
 
 import com.meskitah.githublist.data.remote.GitHubApi
 import com.meskitah.githublist.data.remote.GitHubApi.Companion.BASE_URL
-import com.meskitah.githublist.data.repository.GitHubListRepositoryImpl
-import com.meskitah.githublist.domain.repository.GitHubListRepository
+import com.meskitah.githublist.data.repository.GitHubRepositoryImpl
+import com.meskitah.githublist.domain.repository.GitHubRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -57,7 +57,7 @@ object GitHubListDataModule {
 
     @Provides
     @Singleton
-    fun provideGitHubListRepository(api: GitHubApi): GitHubListRepository {
-        return GitHubListRepositoryImpl(api = api)
+    fun provideGitHubRepository(api: GitHubApi): GitHubRepository {
+        return GitHubRepositoryImpl(api = api)
     }
 }

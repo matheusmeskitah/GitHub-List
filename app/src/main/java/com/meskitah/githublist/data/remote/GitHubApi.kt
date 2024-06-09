@@ -15,10 +15,10 @@ interface GitHubApi {
         @Query("page") page: Int,
     ): GitHubDTO
 
-    @GET("repos/{user}/{repo}/pull")
-    suspend fun getRepo(
+    @GET("repos/{user}/{repo}/pulls")
+    suspend fun getPullRequests(
         @Path("user") user: String,
-        @Path("repo") repo: String
+        @Path("repo") repositoryName: String
     ): List<PullRequestDTO>
 
     companion object {

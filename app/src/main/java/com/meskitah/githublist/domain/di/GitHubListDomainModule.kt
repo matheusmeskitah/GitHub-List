@@ -1,8 +1,9 @@
 package com.meskitah.githublist.domain.di
 
-import com.meskitah.githublist.domain.repository.GitHubListRepository
+import com.meskitah.githublist.domain.repository.GitHubRepository
+import com.meskitah.githublist.domain.use_case.GetPullRequests
 import com.meskitah.githublist.domain.use_case.GetRepositories
-import com.meskitah.githublist.domain.use_case.RepositoriesUseCases
+import com.meskitah.githublist.domain.use_case.GitHubUseCases
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,10 +17,11 @@ object GitHubListDomainModule {
     @Provides
     @ViewModelScoped
     fun provideSportsUseCases(
-        repository: GitHubListRepository
-    ): RepositoriesUseCases {
-        return RepositoriesUseCases(
-            getRepositories = GetRepositories(repository)
+        repository: GitHubRepository
+    ): GitHubUseCases {
+        return GitHubUseCases(
+            getRepositories = GetRepositories(repository),
+            getPullRequests = GetPullRequests(repository)
         )
     }
 }

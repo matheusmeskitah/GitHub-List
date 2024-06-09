@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">GitHub List</string>
 
-    <!-- Repository List -->
+    <!--  Repository List  -->
     <string name="repo_owner_cd">Repository owner image</string>
     <string name="retry">Retry</string>
 
@@ -10,4 +10,7 @@
     <string name="error_oops_something_went_wrong">Oops, something went wrong!</string>
     <string name="oops">Oops!</string>
     <string name="error_something_went_wrong">Something went wrong, please try again</string>
+
+    <!--  Utils  -->
+    <string name="back_icon">Back icon</string>
 </resources>
