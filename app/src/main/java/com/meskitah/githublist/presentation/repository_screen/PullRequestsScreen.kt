@@ -35,7 +35,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -58,7 +57,6 @@ fun PullRequestsScreen(
     userName: String,
     repositoryName: String
 ) {
-    val context = LocalContext.current
     var isRefreshing by remember { mutableStateOf(false) }
 
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -66,13 +64,7 @@ fun PullRequestsScreen(
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_CREATE)
-                viewModel.onEvent(
-                    PullRequestEvent.OnLoadPullRequest(
-                        userName,
-                        repositoryName,
-                        context
-                    )
-                )
+                viewModel.onEvent(PullRequestEvent.OnLoadPullRequest(userName, repositoryName))
         }
 
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -128,13 +120,7 @@ fun PullRequestsScreen(
             isRefreshing = isRefreshing,
             onRefresh = {
                 isRefreshing = true
-                viewModel.onEvent(
-                    PullRequestEvent.OnReloadPullRequest(
-                        userName,
-                        repositoryName,
-                        context
-                    )
-                )
+                viewModel.onEvent(PullRequestEvent.OnReloadPullRequest(userName, repositoryName))
             },
             modifier = Modifier
                 .fillMaxSize()
@@ -184,7 +170,7 @@ fun PullRequestsScreen(
                 Button(
                     onClick = {
                         viewModel.onEvent(
-                            PullRequestEvent.OnLoadPullRequest(userName, repositoryName, context)
+                            PullRequestEvent.OnLoadPullRequest(userName, repositoryName)
                         )
                     }
                 ) {

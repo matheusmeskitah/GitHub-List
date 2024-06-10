@@ -1,6 +1,5 @@
 package com.meskitah.githublist.presentation.repository_screen
 
-import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -29,26 +28,24 @@ class PullRequestViewModel @Inject constructor(
         when (event) {
             is PullRequestEvent.OnLoadPullRequest -> loadPullRequests(
                 event.user,
-                event.repositoryName,
-                event.context
+                event.repositoryName
             )
 
             is PullRequestEvent.OnReloadPullRequest -> reloadPullRequests(
                 event.user,
-                event.repositoryName,
-                event.context
+                event.repositoryName
             )
 
             is PullRequestEvent.OnNavigateUp -> event.navController.navigateUp()
         }
     }
 
-    private fun loadPullRequests(user: String, repositoryName: String, context: Context) {
+    private fun loadPullRequests(user: String, repositoryName: String) {
         viewModelScope.launch {
             state = state.copy(isLoading = true)
 
             useCases
-                .getPullRequests(user, repositoryName, context)
+                .getPullRequests(user, repositoryName)
                 .onSuccess { prs ->
                     state = state.copy(
                         pullRequests = prs.toMutableList(),
@@ -62,10 +59,10 @@ class PullRequestViewModel @Inject constructor(
         }
     }
 
-    private fun reloadPullRequests(user: String, repositoryName: String, context: Context) {
+    private fun reloadPullRequests(user: String, repositoryName: String) {
         viewModelScope.launch {
             useCases
-                .getPullRequests(user, repositoryName, context)
+                .getPullRequests(user, repositoryName)
                 .onSuccess { prs ->
                     state = state.copy(
                         pullRequests = prs.toMutableList(),

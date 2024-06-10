@@ -24,13 +24,12 @@ class GitHubRepositoryImpl(
 
     override suspend fun getPullRequests(
         user: String,
-        repositoryName: String,
-        context: Context
+        repositoryName: String
     ): Result<List<PullRequest>> {
         return try {
             val prs = api.getPullRequests(user = user, repositoryName = repositoryName)
 
-            Result.success(prs.mapNotNull { it.toPullRequest(context) })
+            Result.success(prs.mapNotNull { it.toPullRequest() })
         } catch (e: Exception) {
             e.printStackTrace()
             Result.failure(e)

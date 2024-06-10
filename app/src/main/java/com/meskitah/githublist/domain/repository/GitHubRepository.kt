@@ -10,7 +10,6 @@ interface GitHubRepository {
     suspend fun getRepos(): Flow<PagingData<Repository>>
     suspend fun getPullRequests(
         user: String,
-        repositoryName: String,
-        context: Context
+        repositoryName: String
     ): Result<List<PullRequest>>
 }
