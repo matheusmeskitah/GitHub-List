@@ -47,7 +47,16 @@ android {
     }
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            resources.excludes.add("META-INF/DEPENDENCIES")
+            resources.excludes.add("META-INF/LICENSE")
+            resources.excludes.add("META-INF/LICENSE.txt")
+            resources.excludes.add("META-INF/LICENSE.md")
+            resources.excludes.add("META-INF/LICENSE-notice.md")
+            resources.excludes.add("META-INF/license.txt")
+            resources.excludes.add("META-INF/NOTICE")
+            resources.excludes.add("META-INF/NOTICE.txt")
+            resources.excludes.add("META-INF/notice.txt")
+            resources.excludes.add("META-INF/*.kotlin_module")
         }
     }
 }

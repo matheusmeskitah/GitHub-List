@@ -25,7 +25,7 @@ fun UserPRDTO.toUserPr(): UserPR? {
         UserPR(
             id = it,
             login = login ?: "",
-            avatarUrl = avatar_url ?: ""
+            avatarUrl = avatar_url
         )
     }
 }

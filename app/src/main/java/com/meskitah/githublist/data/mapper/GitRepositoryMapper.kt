@@ -25,7 +25,7 @@ fun OwnerDTO.toOwner(): Owner? {
         Owner(
             id = it,
             login = login ?: "",
-            avatarUrl = avatar_url ?: ""
+            avatarUrl = avatar_url
         )
     }
 }
