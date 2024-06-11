@@ -13,7 +13,7 @@ interface GitHubApi {
         @Query("q") language: String = "language:Java",
         @Query("sort") sort: String = "stars",
         @Query("page") page: Int,
-    ): GitHubDTO
+    ): GitHubDTO?
 
     @GET("repos/{user}/{repo}/pulls")
     suspend fun getPullRequests(

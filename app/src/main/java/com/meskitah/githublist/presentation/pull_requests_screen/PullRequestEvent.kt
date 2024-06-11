@@ -1,4 +1,4 @@
-package com.meskitah.githublist.presentation.repository_screen
+package com.meskitah.githublist.presentation.pull_requests_screen
 
 import androidx.navigation.NavController
 

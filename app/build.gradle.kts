@@ -17,7 +17,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.meskitah.githublist.HiltTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -89,6 +89,9 @@ dependencies {
     testImplementation(libs.test.mock.webserver)
     testImplementation(libs.truth)
     testImplementation(libs.mockk)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.mockito.inline)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -96,6 +99,8 @@ dependencies {
     androidTestImplementation(libs.test.mock.webserver)
     androidTestImplementation(libs.truth)
     androidTestImplementation(libs.mockk.android)
+    androidTestImplementation(libs.mockito.android)
+    androidTestImplementation(libs.hilt.test)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }

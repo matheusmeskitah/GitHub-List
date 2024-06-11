@@ -6,7 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.meskitah.githublist.presentation.repositories_screen.RepositoryScreen
-import com.meskitah.githublist.presentation.repository_screen.PullRequestsScreen
+import com.meskitah.githublist.presentation.pull_requests_screen.PullRequestsScreen
 
 fun NavGraphBuilder.addGitHubListGraph(
     navController: NavController,
