@@ -1,6 +1,5 @@
 package com.meskitah.githublist.domain.repository
 
-import android.content.Context
 import androidx.paging.PagingData
 import com.meskitah.githublist.domain.model.PullRequest
 import com.meskitah.githublist.domain.model.Repository
