@@ -1,10 +1,11 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.org.jetbrains.kotlin.kapt)
-    alias(libs.plugins.dagger.hilt)
-    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.dagger.hilt)
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.org.jetbrains.kotlin.kapt)
 }
 
 android {
@@ -66,9 +67,9 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.material3)
+    implementation(compose.material3)
     implementation(libs.fonts)
-    implementation(libs.icons.extended)
+    implementation(compose.materialIconsExtended)
 
     implementation(libs.androidx.navigation)
     implementation(libs.kotlinx.serialization)
@@ -89,6 +90,8 @@ dependencies {
 
     implementation(libs.coil)
 
+    debugImplementation(libs.androidx.ui.tooling.preview)
+
     testImplementation(libs.junit)
     testImplementation(libs.test.mock.webserver)
     testImplementation(libs.truth)
@@ -103,5 +106,4 @@ dependencies {
     androidTestImplementation(libs.mockk.android)
     androidTestImplementation(libs.mockito.android)
     androidTestImplementation(libs.hilt.test)
-    debugImplementation(libs.androidx.ui.tooling.preview)
 }
