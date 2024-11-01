@@ -45,7 +45,7 @@ class RepositoriesViewModel @Inject constructor(
     private fun loadRepositories() {
         viewModelScope.launch {
             useCases
-                .getRepositories()
+                .getRepositoriesUseCase()
                 .distinctUntilChanged()
                 .filterNotNull()
                 .cachedIn(viewModelScope)

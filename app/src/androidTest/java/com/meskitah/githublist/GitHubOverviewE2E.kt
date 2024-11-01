@@ -18,8 +18,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
-import com.meskitah.githublist.domain.use_case.GetPullRequests
-import com.meskitah.githublist.domain.use_case.GetRepositories
+import com.meskitah.githublist.domain.use_case.GetPullRequestsUseCase
+import com.meskitah.githublist.domain.use_case.GetRepositoriesUseCase
 import com.meskitah.githublist.domain.use_case.GitHubUseCases
 import com.meskitah.githublist.presentation.navigation.ScreenPullRequests
 import com.meskitah.githublist.presentation.navigation.ScreenRepositoryList
@@ -60,8 +60,8 @@ class GitHubOverviewE2E {
 
         repository = GitHubRepositoryFake()
         useCases = GitHubUseCases(
-            getRepositories = GetRepositories(repository),
-            getPullRequests = GetPullRequests(repository)
+            getRepositoriesUseCase = GetRepositoriesUseCase(repository),
+            getPullRequestsUseCase = GetPullRequestsUseCase(repository)
         )
         repositoriesViewModel = RepositoriesViewModel(useCases)
         pullRequestViewModel = PullRequestViewModel(useCases)

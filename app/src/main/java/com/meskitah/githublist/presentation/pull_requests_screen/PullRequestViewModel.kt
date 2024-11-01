@@ -45,7 +45,7 @@ class PullRequestViewModel @Inject constructor(
             state = state.copy(isLoading = true)
 
             useCases
-                .getPullRequests(user, repositoryName)
+                .getPullRequestsUseCase(user, repositoryName)
                 .onSuccess { prs ->
                     state = state.copy(
                         pullRequests = prs.toMutableList(),
@@ -62,7 +62,7 @@ class PullRequestViewModel @Inject constructor(
     private fun reloadPullRequests(user: String, repositoryName: String) {
         viewModelScope.launch {
             useCases
-                .getPullRequests(user, repositoryName)
+                .getPullRequestsUseCase(user, repositoryName)
                 .onSuccess { prs ->
                     state = state.copy(
                         pullRequests = prs.toMutableList(),

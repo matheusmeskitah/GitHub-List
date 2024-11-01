@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,11 +37,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.meskitah.githublist.R
 import com.meskitah.githublist.domain.model.Repository
 import com.meskitah.githublist.presentation.components.RepositoryItem
@@ -49,12 +47,29 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RepositoryScreen(
-    viewModel: RepositoriesViewModel = hiltViewModel(),
-    snackbarHostState: SnackbarHostState,
-    navController: NavController
+    repositories: LazyPagingItems<Repository>,
+    onLoadRepositories: () -> Unit,
+    onCardClick: (Repository) -> Unit,
+    snackbarHostState: SnackbarHostState
 ) {
     val context = LocalContext.current
     var isRefreshing by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(repositories.loadState.append) {
+        if (repositories.loadState.append is LoadState.Error) {
+            coroutineScope.launch {
+                val snackbarResult = snackbarHostState.showSnackbar(
+                    message = "Error: " + (repositories.loadState.append as LoadState.Error).error.message,
+                    actionLabel = context.resources.getString(R.string.retry)
+                )
+                when (snackbarResult) {
+                    SnackbarResult.ActionPerformed -> repositories.retry()
+                    else -> Unit
+                }
+            }
+        }
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -69,8 +84,6 @@ fun RepositoryScreen(
             })
         }
     ) { padding ->
-        val repositories: LazyPagingItems<Repository> = viewModel.state.collectAsLazyPagingItems()
-        val coroutineScope = rememberCoroutineScope()
 
         //region First load
         when (repositories.loadState.refresh) {
@@ -102,7 +115,7 @@ fun RepositoryScreen(
                     Spacer(modifier = Modifier.height(32.dp))
 
                     Button(
-                        onClick = { viewModel.onEvent(RepositoriesEvent.OnLoadRepositories) }
+                        onClick = onLoadRepositories
                     ) {
                         Text(
                             text = stringResource(R.string.retry),
@@ -146,31 +159,15 @@ fun RepositoryScreen(
                     repositories[index]?.let {
                         RepositoryItem(
                             repository = it,
-                            onCardClick = {
-                                viewModel.onEvent(
-                                    RepositoriesEvent.OnRepositoryClick(it, navController)
-                                )
-                            }
+                            onCardClick = { onCardClick(it) }
                         )
                     }
                 }
 
                 //region Pagination
                 when (repositories.loadState.append) {
-                    is LoadState.Error -> item {
-                        coroutineScope.launch {
-                            val snackbarResult = snackbarHostState.showSnackbar(
-                                message = "Error: " + (repositories.loadState.append as LoadState.Error).error.message,
-                                actionLabel = context.resources.getString(R.string.retry)
-                            )
-                            when (snackbarResult) {
-                                SnackbarResult.ActionPerformed -> repositories.retry()
-                                else -> Unit
-                            }
-                        }
-                    }
-
                     is LoadState.Loading -> item { CircularProgressIndicator() }
+                    is LoadState.Error -> Unit
                     is LoadState.NotLoading -> Unit
                 }
                 //endregion

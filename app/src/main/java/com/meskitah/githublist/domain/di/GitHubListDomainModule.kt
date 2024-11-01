@@ -1,8 +1,8 @@
 package com.meskitah.githublist.domain.di
 
 import com.meskitah.githublist.domain.repository.GitHubRepository
-import com.meskitah.githublist.domain.use_case.GetPullRequests
-import com.meskitah.githublist.domain.use_case.GetRepositories
+import com.meskitah.githublist.domain.use_case.GetPullRequestsUseCase
+import com.meskitah.githublist.domain.use_case.GetRepositoriesUseCase
 import com.meskitah.githublist.domain.use_case.GitHubUseCases
 import dagger.Module
 import dagger.Provides
@@ -20,8 +20,8 @@ object GitHubListDomainModule {
         repository: GitHubRepository
     ): GitHubUseCases {
         return GitHubUseCases(
-            getRepositories = GetRepositories(repository),
-            getPullRequests = GetPullRequests(repository)
+            getRepositoriesUseCase = GetRepositoriesUseCase(repository),
+            getPullRequestsUseCase = GetPullRequestsUseCase(repository)
         )
     }
 }
