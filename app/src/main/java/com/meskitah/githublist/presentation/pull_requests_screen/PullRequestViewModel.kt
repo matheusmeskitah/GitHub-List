@@ -29,8 +29,6 @@ class PullRequestViewModel @Inject constructor(
                 event.user,
                 event.repositoryName
             )
-
-            is PullRequestEvent.OnNavigateUp -> event.navController.navigateUp()
         }
     }
 

@@ -28,7 +28,10 @@ fun NavGraphBuilder.addGitHubListGraph(
             repositories = repositories,
             onLoadRepositories = { viewModel.onEvent(RepositoriesEvent.OnLoadRepositories) },
             onCardClick = {
-                viewModel.onEvent(RepositoriesEvent.OnRepositoryClick(it, navController))
+                NavigationEvents.onEvent(
+                    navController,
+                    NavigationEvents.OnNavigateToPullRequests(it)
+                )
             },
             snackbarHostState = snackbarState
         )
@@ -43,7 +46,12 @@ fun NavGraphBuilder.addGitHubListGraph(
             snackbarHostState = snackbarState,
             repositoryName = args.repositoryName,
             setScreenLoaded = viewModel::setScreenLoaded,
-            onNavigateUp = { viewModel.onEvent(PullRequestEvent.OnNavigateUp(navController)) },
+            onNavigateUp = {
+                NavigationEvents.onEvent(
+                    navController,
+                    NavigationEvents.OnNavigateUp
+                )
+            },
             onLoadPullRequest = {
                 viewModel.onEvent(
                     PullRequestEvent.OnReloadPullRequest(
