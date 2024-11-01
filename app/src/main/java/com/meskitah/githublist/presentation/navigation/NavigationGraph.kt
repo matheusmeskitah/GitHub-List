@@ -9,6 +9,8 @@ import androidx.navigation.toRoute
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.meskitah.githublist.domain.model.Repository
+import com.meskitah.githublist.presentation.pull_requests_screen.PullRequestEvent
+import com.meskitah.githublist.presentation.pull_requests_screen.PullRequestViewModel
 import com.meskitah.githublist.presentation.pull_requests_screen.PullRequestsScreen
 import com.meskitah.githublist.presentation.repositories_screen.RepositoriesEvent
 import com.meskitah.githublist.presentation.repositories_screen.RepositoriesViewModel
@@ -21,7 +23,7 @@ fun NavGraphBuilder.addGitHubListGraph(
     composable<ScreenRepositoryList> {
         val viewModel: RepositoriesViewModel = hiltViewModel()
         val repositories: LazyPagingItems<Repository> = viewModel.state.collectAsLazyPagingItems()
-        
+
         RepositoryScreen(
             repositories = repositories,
             onLoadRepositories = { viewModel.onEvent(RepositoriesEvent.OnLoadRepositories) },
@@ -34,11 +36,23 @@ fun NavGraphBuilder.addGitHubListGraph(
 
     composable<ScreenPullRequests> {
         val args = it.toRoute<ScreenPullRequests>()
+        val viewModel: PullRequestViewModel = hiltViewModel()
+
         PullRequestsScreen(
+            state = viewModel.state,
             snackbarHostState = snackbarState,
-            navController = navController,
-            userName = args.creator,
-            repositoryName = args.repositoryName
+            repositoryName = args.repositoryName,
+            setScreenLoaded = viewModel::setScreenLoaded,
+            onNavigateUp = { viewModel.onEvent(PullRequestEvent.OnNavigateUp(navController)) },
+            onLoadPullRequest = {
+                viewModel.onEvent(
+                    PullRequestEvent.OnReloadPullRequest(
+                        args.creator,
+                        args.repositoryName
+                    )
+                )
+            },
+            onRefresh = viewModel::onRefresh
         )
     }
 }

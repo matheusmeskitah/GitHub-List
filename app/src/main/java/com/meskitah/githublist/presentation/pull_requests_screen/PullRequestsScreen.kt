@@ -27,61 +27,32 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.navigation.NavController
 import com.meskitah.githublist.R
-import com.meskitah.githublist.core.util.UiEvent
 import com.meskitah.githublist.presentation.components.PullRequestItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PullRequestsScreen(
-    viewModel: PullRequestViewModel = hiltViewModel(),
+    state: PullRequestState,
     snackbarHostState: SnackbarHostState,
-    navController: NavController,
-    userName: String,
-    repositoryName: String
+    repositoryName: String,
+    setScreenLoaded: () -> Unit,
+    onNavigateUp: () -> Unit,
+    onLoadPullRequest: () -> Unit,
+    onRefresh: (Boolean) -> Unit
 ) {
-    var isRefreshing by remember { mutableStateOf(false) }
+    LaunchedEffect(state.isFirstLoad) {
+        if (state.isFirstLoad)
+            onLoadPullRequest()
 
-    val lifecycleOwner = LocalLifecycleOwner.current
-
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_CREATE)
-                viewModel.onEvent(PullRequestEvent.OnLoadPullRequest(userName, repositoryName))
-        }
-
-        lifecycleOwner.lifecycle.addObserver(observer)
-
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
-
-    LaunchedEffect(true) {
-        viewModel.uiEvent.collect { event ->
-            when (event) {
-                is UiEvent.Success -> {
-                    isRefreshing = false
-                }
-            }
-        }
+        setScreenLoaded()
     }
 
     Scaffold(
@@ -97,13 +68,7 @@ fun PullRequestsScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = {
-                        viewModel.onEvent(
-                            PullRequestEvent.OnNavigateUp(
-                                navController
-                            )
-                        )
-                    }) {
+                    IconButton(onClick = onNavigateUp) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(id = R.string.back_icon),
@@ -114,13 +79,11 @@ fun PullRequestsScreen(
             )
         }
     ) { padding ->
-        val pullRequestsState = viewModel.state
-
         PullToRefreshBox(
-            isRefreshing = isRefreshing,
+            isRefreshing = state.isRefreshing,
             onRefresh = {
-                isRefreshing = true
-                viewModel.onEvent(PullRequestEvent.OnReloadPullRequest(userName, repositoryName))
+                onRefresh(true)
+                onLoadPullRequest()
             },
             modifier = Modifier
                 .fillMaxSize()
@@ -132,15 +95,15 @@ fun PullRequestsScreen(
                 contentPadding = PaddingValues(16.dp)
             ) {
                 items(
-                    count = pullRequestsState.pullRequests.size
+                    count = state.pullRequests.size
                 ) { index ->
-                    PullRequestItem(pullRequest = pullRequestsState.pullRequests[index])
+                    PullRequestItem(pullRequest = state.pullRequests[index])
                 }
             }
         }
 
         //region Error
-        if (pullRequestsState.isError) {
+        if (state.isError) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -167,13 +130,7 @@ fun PullRequestsScreen(
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                Button(
-                    onClick = {
-                        viewModel.onEvent(
-                            PullRequestEvent.OnLoadPullRequest(userName, repositoryName)
-                        )
-                    }
-                ) {
+                Button(onClick = onLoadPullRequest) {
                     Text(
                         text = stringResource(R.string.retry),
                         style = MaterialTheme.typography.labelLarge,
@@ -184,7 +141,7 @@ fun PullRequestsScreen(
         //endregion
 
         //region Loading
-        if (pullRequestsState.isLoading) {
+        if (state.isLoading) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.fillMaxSize()

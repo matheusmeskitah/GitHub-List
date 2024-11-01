@@ -5,12 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.meskitah.githublist.core.util.UiEvent
 import com.meskitah.githublist.domain.use_case.GitHubUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -20,9 +17,6 @@ class PullRequestViewModel @Inject constructor(
 
     var state by mutableStateOf(PullRequestState())
         private set
-
-    private val _uiEvent = Channel<UiEvent>()
-    val uiEvent = _uiEvent.receiveAsFlow()
 
     fun onEvent(event: PullRequestEvent) {
         when (event) {
@@ -38,6 +32,14 @@ class PullRequestViewModel @Inject constructor(
 
             is PullRequestEvent.OnNavigateUp -> event.navController.navigateUp()
         }
+    }
+
+    fun setScreenLoaded() {
+        state = state.copy(isFirstLoad = false)
+    }
+
+    fun onRefresh(isRefreshing: Boolean) {
+        state = state.copy(isRefreshing = isRefreshing)
     }
 
     private fun loadPullRequests(user: String, repositoryName: String) {
@@ -67,10 +69,9 @@ class PullRequestViewModel @Inject constructor(
                     state = state.copy(
                         pullRequests = prs.toMutableList(),
                         isLoading = false,
-                        isError = false
+                        isError = false,
+                        isRefreshing = false
                     )
-
-                    _uiEvent.send(UiEvent.Success)
                 }
                 .onFailure {
                     state = state.copy(isLoading = false, isError = true)
