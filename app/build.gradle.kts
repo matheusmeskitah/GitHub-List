@@ -90,6 +90,8 @@ dependencies {
 
     implementation(libs.coil)
 
+    implementation(libs.androidx.ui.test.junit4.android)
+
     debugImplementation(libs.androidx.ui.tooling.preview)
 
     testImplementation(libs.junit)
