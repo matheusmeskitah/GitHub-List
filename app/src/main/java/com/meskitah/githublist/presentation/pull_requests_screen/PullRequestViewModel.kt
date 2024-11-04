@@ -36,10 +36,6 @@ class PullRequestViewModel @Inject constructor(
         state = state.copy(isFirstLoad = false)
     }
 
-    fun onRefresh(isRefreshing: Boolean) {
-        state = state.copy(isRefreshing = isRefreshing)
-    }
-
     private fun loadPullRequests(user: String, repositoryName: String) {
         viewModelScope.launch {
             state = state.copy(isLoading = true)
@@ -61,6 +57,8 @@ class PullRequestViewModel @Inject constructor(
 
     private fun reloadPullRequests(user: String, repositoryName: String) {
         viewModelScope.launch {
+            state = state.copy(isRefreshing = true)
+
             useCases
                 .getPullRequestsUseCase(user, repositoryName)
                 .onSuccess { prs ->

@@ -54,13 +54,20 @@ fun NavGraphBuilder.addGitHubListGraph(
             },
             onLoadPullRequest = {
                 viewModel.onEvent(
+                    PullRequestEvent.OnLoadPullRequest(
+                        args.creator,
+                        args.repositoryName
+                    )
+                )
+            },
+            onReloadPullRequest = {
+                viewModel.onEvent(
                     PullRequestEvent.OnReloadPullRequest(
                         args.creator,
                         args.repositoryName
                     )
                 )
             },
-            onRefresh = viewModel::onRefresh
         )
     }
 }

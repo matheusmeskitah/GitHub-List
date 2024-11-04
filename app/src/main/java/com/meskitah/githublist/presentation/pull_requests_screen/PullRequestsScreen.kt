@@ -46,7 +46,7 @@ fun PullRequestsScreen(
     setScreenLoaded: () -> Unit,
     onNavigateUp: () -> Unit,
     onLoadPullRequest: () -> Unit,
-    onRefresh: (Boolean) -> Unit
+    onReloadPullRequest: () -> Unit
 ) {
     LaunchedEffect(state.isFirstLoad) {
         if (state.isFirstLoad)
@@ -81,10 +81,7 @@ fun PullRequestsScreen(
     ) { padding ->
         PullToRefreshBox(
             isRefreshing = state.isRefreshing,
-            onRefresh = {
-                onRefresh(true)
-                onLoadPullRequest()
-            },
+            onRefresh = onReloadPullRequest,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
