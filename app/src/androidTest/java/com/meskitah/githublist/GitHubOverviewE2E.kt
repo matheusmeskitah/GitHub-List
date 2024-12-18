@@ -16,15 +16,19 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import com.meskitah.githublist.domain.use_case.GetPullRequestsUseCase
 import com.meskitah.githublist.domain.use_case.GetRepositoriesUseCase
 import com.meskitah.githublist.domain.use_case.GitHubUseCases
+import com.meskitah.githublist.presentation.navigation.NavigationEvents
 import com.meskitah.githublist.presentation.navigation.ScreenPullRequests
 import com.meskitah.githublist.presentation.navigation.ScreenRepositoryList
+import com.meskitah.githublist.presentation.pull_requests_screen.PullRequestEvent
 import com.meskitah.githublist.presentation.pull_requests_screen.PullRequestViewModel
 import com.meskitah.githublist.presentation.pull_requests_screen.PullRequestsScreen
+import com.meskitah.githublist.presentation.repositories_screen.RepositoriesEvent
 import com.meskitah.githublist.presentation.repositories_screen.RepositoriesViewModel
 import com.meskitah.githublist.presentation.repositories_screen.RepositoryScreen
 import com.meskitah.githublist.repository.GitHubRepositoryFake
@@ -79,20 +83,49 @@ class GitHubOverviewE2E {
                 ) {
                     composable<ScreenRepositoryList> {
                         RepositoryScreen(
-                            viewModel = repositoriesViewModel,
+                            repositories = repositoriesViewModel.state.collectAsLazyPagingItems(),
+                            onLoadRepositories = {
+                                repositoriesViewModel.onEvent(RepositoriesEvent.OnLoadRepositories)
+                            },
+                            onCardClick = {
+                                NavigationEvents.onEvent(
+                                    navController,
+                                    NavigationEvents.OnNavigateToPullRequests(it)
+                                )
+                            },
                             snackbarHostState = snackbarState,
-                            navController = navController
                         )
                     }
 
                     composable<ScreenPullRequests> {
                         val args = it.toRoute<ScreenPullRequests>()
                         PullRequestsScreen(
-                            viewModel = pullRequestViewModel,
+                            state = pullRequestViewModel.state,
                             snackbarHostState = snackbarState,
-                            navController = navController,
-                            userName = args.creator,
-                            repositoryName = args.repositoryName
+                            repositoryName = args.repositoryName,
+                            setScreenLoaded = pullRequestViewModel::setScreenLoaded,
+                            onNavigateUp = {
+                                NavigationEvents.onEvent(
+                                    navController,
+                                    NavigationEvents.OnNavigateUp
+                                )
+                            },
+                            onLoadPullRequest = {
+                                pullRequestViewModel.onEvent(
+                                    PullRequestEvent.OnLoadPullRequest(
+                                        args.creator,
+                                        args.repositoryName
+                                    )
+                                )
+                            },
+                            onReloadPullRequest = {
+                                pullRequestViewModel.onEvent(
+                                    PullRequestEvent.OnReloadPullRequest(
+                                        args.creator,
+                                        args.repositoryName
+                                    )
+                                )
+                            }
                         )
                     }
                 }

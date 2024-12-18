@@ -9,8 +9,11 @@ import com.meskitah.githublist.domain.use_case.GitHubUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -20,11 +23,13 @@ class RepositoriesViewModel @Inject constructor(
 
     private val _state: MutableStateFlow<PagingData<Repository>> =
         MutableStateFlow(value = PagingData.empty())
-    val state: MutableStateFlow<PagingData<Repository>> get() = _state
-
-    init {
-        onEvent(RepositoriesEvent.OnLoadRepositories)
-    }
+    val state
+        get() = _state
+            .onStart { onEvent(RepositoriesEvent.OnLoadRepositories) }
+            .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000L), PagingData.empty()
+        )
 
     fun onEvent(event: RepositoriesEvent) {
         when (event) {
